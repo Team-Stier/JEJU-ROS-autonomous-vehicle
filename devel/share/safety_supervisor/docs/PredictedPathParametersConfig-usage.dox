@@ -1,0 +1,8 @@
+\subsubsection usage Usage
+\verbatim
+<node name="predicted_path_parameters" pkg="safety_supervisor" type="predicted_path_parameters">
+  <param name="path_step" type="double" value="0.05" />
+  <param name="path_count" type="int" value="50" />
+</node>
+\endverbatim
+

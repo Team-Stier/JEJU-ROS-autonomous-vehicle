@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/install
+
+Name: safety_supervisor
+Description: Description of safety_supervisor
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: dynamic_reconfigure geometry_msgs lidar_interfaces nav_msgs rospy std_msgs visualization_msgs

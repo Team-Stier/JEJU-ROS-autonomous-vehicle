@@ -1,0 +1,13 @@
+<launch>
+  <!-- Behavior Planner -->
+  <node pkg="behavior_planner" type="behavior_planner_node" name="behavior_planner" output="log" respawn="true" />
+  
+  <!-- Pure Pursuit -->
+  <node pkg="pure_pursuit" type="pure_pursuit_node" name="pure_pursuit" output="log" respawn="true" />
+  
+  <!-- Steering Filter -->
+  <node pkg="pure_pursuit" type="steer_filter.py" name="steer_filter" output="log" respawn="true" />
+  
+  <!-- RViz Visualizer -->
+  <node pkg="stier_bringup" type="rviz_visualizer.py" name="rviz_visualizer" output="log" respawn="true" />
+</launch>

@@ -1,0 +1,16 @@
+\subsubsection usage Usage
+\verbatim
+<node name="safety_supervisor_parameters" pkg="safety_supervisor" type="safety_supervisor_parameters">
+  <param name="path_width_margin" type="double" value="0.1" />
+  <param name="max_check_distance" type="double" value="10.0" />
+  <param name="min_check_distance" type="double" value="0.7" />
+  <param name="lookahead_time" type="double" value="0.6" />
+  <param name="roi_speed_curve" type="double" value="0.5" />
+  <param name="detect_count_threshold" type="int" value="2" />
+  <param name="clear_count_threshold" type="int" value="4" />
+  <param name="stale_clear_count_threshold" type="int" value="2" />
+  <param name="data_timeout_sec" type="double" value="0.5" />
+  <param name="margin_step" type="double" value="0.01" />
+</node>
+\endverbatim
+

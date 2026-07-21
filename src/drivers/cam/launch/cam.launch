@@ -1,0 +1,14 @@
+<launch>
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" respawn="true" respawn_delay="5">
+    <param name="video_device" value="/dev/cam"/>
+    <param name="image_width" value="640" />
+    <param name="image_height" value="360" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="framerate" value="30" />
+    <param name="camera_frame_id" value="usb_cam" />
+  </node>
+
+  <!-- 스크립트를 cam 패키지 실행파일로 호출 -->
+  <node name="kiyo_pro_setup" pkg="cam" type="kiyo_setup.sh" output="screen" />
+</launch>
+

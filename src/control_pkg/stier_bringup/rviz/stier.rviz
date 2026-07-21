@@ -1,0 +1,92 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+  - Class: rviz/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.5
+      Cell Size: 10
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Name: Grid
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /vehicle_viz
+      Name: Vehicle
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /pf_target
+      Name: Lookahead
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /behavior_planner/lidar_marker
+      Name: Lidar Path
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /behavior_planner/vision_marker
+      Name: Vision Path
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /behavior_planner/gps_marker
+      Name: GPS Path
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /behavior_planner/path_marker
+      Name: Target Path Marker
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /voxel_visualization_marker_array
+      Name: Voxel Array
+      Value: true
+    - Class: rviz/MarkerArray
+      Enabled: true
+      Marker Topic: /predicted_path_marker_array
+      Name: Predicted Path Array
+      Value: true
+    - Class: rviz/Marker
+      Enabled: true
+      Marker Topic: /speed_hud_marker
+      Name: Speed HUD
+      Value: true
+  Enabled: true
+  Global Options:
+    Background Color: 48; 48; 48
+    Default Light: true
+    Fixed Frame: stier
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+  Value: true
+  Views:
+    Current:
+      Class: rviz/ThirdPersonFollower
+      Distance: 15
+      Focal Point: {X: 0, Y: 0, Z: 0}
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 1.5708
+      Target Frame: stier
+      Value: ThirdPersonFollower (rviz)
+      Yaw: 3.14159
+    Saved: ~
+Window Geometry:
+  Displays:
+    collapsed: false
+  Height: 550
+  Width: 925
+  X: 0
+  Y: 20

@@ -1,0 +1,29 @@
+<launch>
+  <arg name="points_topic" default="/velodyne_points" />
+  <arg name="roi_topic" default="/roi_raw" />
+  <arg name="voxel_topic" default="/voxel_info" />
+  <arg name="use_voxel_visualizer" default="true" />
+  <arg name="voxel_visualizer_frame_id" default="velodyne" />
+  <arg name="voxel_marker_topic" default="/voxel_visualization_marker_array" />
+
+  <arg name="use_rrt_path" default="true" />
+  <arg name="rrt_path_topic" default="/lidar_path" />
+
+  <include file="$(find object_detector)/launch/object_detector_bringup.launch">
+    <arg name="points_topic" value="$(arg points_topic)" />
+    <arg name="roi_topic" value="$(arg roi_topic)" />
+    <arg name="voxel_topic" value="$(arg voxel_topic)" />
+    <arg name="use_visualizer" value="$(arg use_voxel_visualizer)" />
+    <arg name="visualizer_frame_id" value="$(arg voxel_visualizer_frame_id)" />
+    <arg name="visualizer_marker_topic" value="$(arg voxel_marker_topic)" />
+  </include>
+
+  <include file="$(find safety_supervisor)/launch/safety_supervisor_bringup.launch" />
+
+  <group if="$(arg use_rrt_path)">
+    <node pkg="rrt_path" type="rrt_dynamic_goal.py" name="rrt_dynamic_goal" output="screen">
+      <remap from="/voxel_info" to="$(arg voxel_topic)" />
+      <remap from="/lidar_path" to="$(arg rrt_path_topic)" />
+    </node>
+  </group>
+</launch>

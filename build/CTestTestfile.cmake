@@ -1,0 +1,37 @@
+# CMake generated Testfile for 
+# Source directory: /home/stier/catkin_ws/src
+# Build directory: /home/stier/catkin_ws/build
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+subdirs("gtest")
+subdirs("drivers/gps/gps_bringup")
+subdirs("lidar_pkg/lidar_stack/src/lidar_stack_bringup")
+subdirs("lidar_pkg/lidar_stack/src/lidar_interfaces")
+subdirs("drivers/erp42_msgs")
+subdirs("control_pkg/stier_bringup")
+subdirs("drivers/gps/ublox/ublox")
+subdirs("drivers/lidar/velodyne/velodyne")
+subdirs("drivers/lidar/velodyne/velodyne_msgs")
+subdirs("drivers/cam")
+subdirs("control_pkg/rddf_recorder")
+subdirs("lidar_pkg/lidar_stack/src/rrt_path")
+subdirs("lidar_pkg/lidar_stack/src/safety_supervisor")
+subdirs("drivers/imu/Xsens_MTi_ROS_Driver_and_Ntrip_Client/src/ntrip")
+subdirs("drivers/gps/ntrip_client-ros")
+subdirs("drivers/lidar/rplidar_ros")
+subdirs("lidar_pkg/lidar_stack/src/object_detector")
+subdirs("drivers/gps/ublox/ublox_serialization")
+subdirs("drivers/gps/ublox/ublox_msgs")
+subdirs("control_pkg/pure_pursuit")
+subdirs("control_pkg/behavior_planner")
+subdirs("drivers/gps/ublox/ublox_gps")
+subdirs("drivers/gps/ublox/ublox_msg_filters")
+subdirs("drivers/gps/ublox_utils")
+subdirs("drivers/gps/ROS-UTM-LLA")
+subdirs("drivers/lidar/velodyne/velodyne_driver")
+subdirs("drivers/lidar/velodyne/velodyne_laserscan")
+subdirs("drivers/lidar/velodyne/velodyne_pcl")
+subdirs("drivers/lidar/velodyne/velodyne_pointcloud")
+subdirs("vision_pkg")
+subdirs("drivers/imu/Xsens_MTi_ROS_Driver_and_Ntrip_Client/src/xsens_ros_mti_driver")

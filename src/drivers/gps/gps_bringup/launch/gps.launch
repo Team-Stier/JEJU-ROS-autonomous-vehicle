@@ -1,0 +1,12 @@
+<launch>
+  <include file="$(find ublox_utils)/launch/ublox.launch">
+    <arg name="device_position_receiver" value="/dev/gps" />
+    <arg name="ntrip_host" value="RTS1.ngii.go.kr" />
+    <arg name="ntrip_mountpoint" value="VRS-RTCM31" />
+    <arg name="use_ntrip" value="true" />
+    <arg name="ntrip_username" value="suhyeon351" />
+    <arg name="ntrip_password" value="ngii" />
+  </include>
+
+  <include file="$(find utm_lla)/launch/coordinate_convertion.launch" />
+</launch>

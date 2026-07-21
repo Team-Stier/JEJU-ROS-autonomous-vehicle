@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/install
+
+Name: behavior_planner
+Description: Description of behavior_planner
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -lbehavior_planner_lib
+Requires: roscpp std_msgs geometry_msgs nav_msgs ublox_msgs erp42_msgs pure_pursuit roslib

@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/install
+
+Name: ntrip
+Description: Description of ntrip
+Version: 0.0.0
+Cflags: -I${prefix}/include -I/usr/include
+Libs: -L${prefix}/lib -lntrip /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0 /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
+Requires: roscpp std_msgs nmea_msgs mavros_msgs diagnostic_msgs

@@ -1,0 +1,15 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~path_width_margin" : \b [double] Half corridor width margin (m) min: 0.0, default: 0.1, max: 5.0
+- \b "~max_check_distance" : \b [double] Maximum collision check distance (m) min: 0.0, default: 10.0, max: 100.0
+- \b "~min_check_distance" : \b [double] Minimum collision check distance (m) min: 0.0, default: 0.7, max: 100.0
+- \b "~lookahead_time" : \b [double] Lookahead time for collision checking (s) min: 0.0, default: 0.6, max: 10.0
+- \b "~roi_speed_curve" : \b [double] ROI speed sensitivity curve: positive=low-speed insensitive, negative=low-speed sensitive min: -1.0, default: 0.5, max: 1.0
+- \b "~detect_count_threshold" : \b [int] Consecutive hazard detections required min: 1, default: 2, max: 100
+- \b "~clear_count_threshold" : \b [int] Consecutive safe detections required min: 1, default: 4, max: 100
+- \b "~stale_clear_count_threshold" : \b [int] Consecutive stale cycles required to clear min: 1, default: 2, max: 100
+- \b "~data_timeout_sec" : \b [double] Input freshness timeout (s) min: 0.0, default: 0.5, max: 10.0
+- \b "~margin_step" : \b [double] Per-point corridor margin decay (m) min: 0.0, default: 0.01, max: 1.0
+

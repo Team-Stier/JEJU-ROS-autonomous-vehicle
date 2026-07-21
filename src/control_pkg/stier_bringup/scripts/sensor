@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+# Master-Slave Multi-Window Launcher for Sensors (8 Windows arranged in grid)
+# Closing the MASTER window [1] will terminate ALL other windows and nodes.
+
+# Enable job control for process group management
+set -m
+
+echo "---------------------------------------------------"
+echo " Launching Sensor Multi-Window Monitor (8 Windows)"
+echo " [1] Master Window Control Active (Isolated)"
+echo "---------------------------------------------------"
+
+# Track PIDs of slave processes
+SLAVE_PIDS=()
+
+cleanup() {
+    echo ""
+    echo ">>> Master window closed. Cleaning up all associated processes..."
+    
+    # Disable trap to avoid recursion
+    trap - EXIT
+    
+    # Kill background slave terminators explicitly
+    for pid in "${SLAVE_PIDS[@]}"; do
+        if kill -0 "$pid" 2>/dev/null; then
+            pkill -P "$pid"
+            kill -9 "$pid"
+        fi
+    done
+    
+    kill -9 0
+    exit 0
+}
+trap cleanup EXIT INT TERM
+
+# Geometry Presets (4x2 Grid assuming 1920x1080 screen)
+W=480
+H=500
+# Row 1
+G1="--geometry=${W}x${H}+0+0"
+G2="--geometry=${W}x${H}+480+0"
+G3="--geometry=${W}x${H}+960+0"
+G4="--geometry=${W}x${H}+1440+0"
+# Row 2
+G5="--geometry=${W}x${H}+0+500"
+G6="--geometry=${W}x${H}+480+500"
+G7="--geometry=${W}x${H}+960+500"
+G8="--geometry=${W}x${H}+1440+500"
+
+# Commands
+CMD1="roslaunch gps_bringup gps.launch"
+CMD2="rostopic echo /ublox_position_receiver/navstatus"
+CMD3="rostopic hz /ublox_position_receiver/rtcm"
+CMD4="rostopic echo /ublox_position_receiver/navpvt | grep hAcc"
+CMD5="roslaunch ~/catkin_ws/src/drivers/cam/launch/cam.launch"
+CMD6="roslaunch velodyne_pointcloud VLP16_points.launch"
+CMD7="rosrun rosserial_python serial_node.py /dev/ttyUSB0"
+CMD8="htop"
+
+launch_window() {
+    local index=$1
+    local geometry=$2
+    local title=$3
+    local cmd=$4
+    local is_master=$5
+
+    local rcfile="/tmp/sensor_rc_${index}.bash"
+    cat <<EOF > "$rcfile"
+source /opt/ros/noetic/setup.bash
+source ~/catkin_ws/devel/setup.bash
+echo "======================================================"
+echo " Window: $title"
+echo " Running: $cmd"
+echo "======================================================"
+eval "$cmd"
+echo "======================================================"
+echo " Command exited. Falling back to shell."
+exec bash
+EOF
+
+    if [ "$is_master" = "true" ]; then
+        terminator --no-dbus $geometry -T "MASTER: $title" -x bash --rcfile "$rcfile"
+    else
+        terminator -u $geometry -T "$title" -x bash --rcfile "$rcfile" &
+        SLAVE_PIDS+=($!)
+        sleep 0.2
+    fi
+}
+
+# Automatic ROS Master management
+if ! rostopic list >/dev/null 2>&1; then
+    echo "[SYSTEM] roscore not found. Starting background master..."
+    roscore &
+    sleep 3
+fi
+
+# Launch SLAVE windows in background [2 to 8]
+launch_window 2 "$G2" "[2] pos" "$CMD2" "false"
+launch_window 3 "$G3" "[3] rtcm" "$CMD3" "false"
+launch_window 4 "$G4" "[4] gps_error" "$CMD4" "false"
+launch_window 5 "$G5" "[5] cam" "$CMD5" "false"
+launch_window 6 "$G6" "[6] vlp" "$CMD6" "false"
+launch_window 7 "$G7" "[7] arduino" "$CMD7" "false"
+launch_window 8 "$G8" "[8] System Monitor" "$CMD8" "false"
+
+# Launch MASTER window in FOREGROUND (Isolated) [1]
+launch_window 1 "$G1" "[1] gps" "$CMD1" "true"

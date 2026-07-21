@@ -1,0 +1,30 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~bilateral_d" : \b [int] Bilateral Filter d min: 3, default: 9, max: 15
+- \b "~bilateral_color" : \b [int] Bilateral Filter sigmaColor min: 10, default: 30, max: 200
+- \b "~bilateral_space" : \b [int] Bilateral Filter sigmaSpace min: 10, default: 30, max: 200
+- \b "~canny_low" : \b [int] Canny Low Threshold min: 0, default: 50, max: 255
+- \b "~canny_high" : \b [int] Canny High Threshold min: 0, default: 120, max: 255
+- \b "~camera_height" : \b [double] Camera Height (m) min: 0.1, default: 1.2, max: 5.0
+- \b "~camera_pitch" : \b [double] Camera Pitch (deg) min: -90.0, default: 50.0, max: 90.0
+- \b "~camera_fov" : \b [int] Camera Horizontal FOV (deg) min: 30, default: 103, max: 150
+- \b "~bev_length" : \b [double] BEV ROI Length (m) min: 1.0, default: 4.0, max: 30.0
+- \b "~bev_width" : \b [double] BEV ROI Width (m) min: 1.0, default: 4.0, max: 20.0
+- \b "~n_windows" : \b [int] Number of Windows min: 5, default: 10, max: 80
+- \b "~sw_margin" : \b [int] Window Search Margin min: 5, default: 30, max: 200
+- \b "~minpix" : \b [int] Min Pixels per Window min: 1, default: 10, max: 100
+- \b "~minpix_bottom" : \b [int] Min Pixels (Bottom) min: 1, default: 10, max: 200
+- \b "~max_gap_windows" : \b [int] Max Empty Windows min: 0, default: 1, max: 5
+- \b "~sw_bottom_offset" : \b [int] Bottom Offset (px) min: 0, default: 50, max: 100
+- \b "~minlanepix" : \b [int] Min Total Lane Pixels min: 50, default: 200, max: 2000
+- \b "~poly_order" : \b [int] Polynomial Order min: 1, default: 1, max: 3
+- \b "~lane_width_px" : \b [int] Default Lane Width (px) min: 80, default: 100, max: 1000
+- \b "~min_lane_width_px" : \b [int] Min Allowed Spacing (px) min: 50, default: 200, max: 600
+- \b "~smooth_alpha" : \b [double] Fit Smoothing Alpha min: 0.0, default: 0.9, max: 1.0
+- \b "~sw_pred_amp" : \b [double] Curve Pred Amplification min: 1.0, default: 1.2, max: 2.0
+- \b "~sw_curve_ratio" : \b [double] Curve Search Margin Ratio min: 0.0, default: 0.0, max: 2.0
+- \b "~publish_debug_images" : \b [bool] Publish Debug Topics (Heavy) min: False, default: True, max: True
+- \b "~save_config" : \b [bool] Save Parameters to config.py min: False, default: False, max: True
+

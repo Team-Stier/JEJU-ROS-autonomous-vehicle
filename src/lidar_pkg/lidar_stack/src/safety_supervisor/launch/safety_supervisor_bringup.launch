@@ -1,0 +1,5 @@
+<launch>
+  <node pkg="safety_supervisor" type="path_forecaster.py" name="path_forecaster" output="screen" />
+  <node pkg="safety_supervisor" type="safety_supervisor_node.py" name="safety_supervisor" output="screen" />
+  <node pkg="safety_supervisor" type="predicted_path_visualizer.py" name="predicted_path_visualizer" output="screen" />
+</launch>

@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/install
+
+Name: lidar_stack_bringup
+Description: Description of lidar_stack_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,7 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~path_step" : \b [double] Shared predicted path point spacing (m) min: 0.01, default: 0.05, max: 5.0
+- \b "~path_count" : \b [int] Shared predicted path point count min: 1, default: 50, max: 200
+

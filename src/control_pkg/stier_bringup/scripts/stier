@@ -1,0 +1,216 @@
+#!/usr/bin/env bash
+
+# Master-Slave Multi-Window Launcher (v27) for Stier System
+# Final fix for RViz environment/sourcing issues.
+# Closing the MASTER window [1] will terminate ALL other windows and nodes.
+
+# Enable job control for process group management
+set -m
+
+ROUTING=${1:-gps}
+RDDF=${2:-backward.txt}
+
+echo "---------------------------------------------------"
+echo " Launching Master-Slave Multi-Window Monitor (v28)"
+echo " [1] Master Window Control Active (Isolated)"
+echo " Routing: $ROUTING"
+echo "---------------------------------------------------"
+
+# 1. Automatic ROS Master management
+if ! rostopic list >/dev/null 2>&1; then
+    echo "[SYSTEM] roscore not found. Starting background master..."
+    roscore &
+    sleep 3
+    until rostopic list >/dev/null 2>&1; do
+        sleep 1
+    done
+fi
+
+# 2. Set ROS Parameters
+rosparam set routing_mode "$ROUTING"
+rosparam set rddf_file "$RDDF"
+rosparam set /use_sim_time false
+
+# Load mode-specific parameters from YAML
+PARAM_FILE=$(rospack find behavior_planner)/config/params.yaml
+if [ -f "$PARAM_FILE" ]; then
+    echo "[SYSTEM] Loading parameters from $PARAM_FILE"
+    rosparam load "$PARAM_FILE" /stier_params
+else
+    echo "[WARN] Parameter file not found: $PARAM_FILE"
+fi
+
+# 3. Base Environment & Cleanup Logic
+WRAPPER="/tmp/stier_node_wrapper.sh"
+cat <<'EOF' > "$WRAPPER"
+#!/usr/bin/env bash
+NODE_CMD=$1
+source /opt/ros/noetic/setup.bash
+source ~/catkin_ws/devel/setup.bash
+echo ">>> Executing: $NODE_CMD"
+eval "$NODE_CMD"
+exec bash
+EOF
+chmod +x "$WRAPPER"
+
+# Track PIDs of slave processes
+SLAVE_PIDS=()
+
+cleanup() {
+    echo ""
+    echo ">>> Master window closed. Cleaning up all associated processes..."
+    
+    # Disable trap to avoid recursion
+    trap - EXIT
+    
+    # 1. Kill background slave terminators explicitly
+    for pid in "${SLAVE_PIDS[@]}"; do
+        if kill -0 "$pid" 2>/dev/null; then
+            pkill -P "$pid"
+            kill -9 "$pid"
+        fi
+    done
+    
+    # 2. Aggressive kill for the entire process group
+    kill -9 0
+    exit 0
+}
+trap cleanup EXIT INT TERM
+
+# ==============================================================================
+# 4. USER CONFIGURATION (LAYOUT & GEOMETRY)
+# Edit these variables to adjust window positions and margins.
+# ==============================================================================
+SW=1920           # Screen Width
+SH=1200           # Screen Height
+MX_MAIN=35        # Half of the horizontal gap between windows (Total gap = 40)
+MY_MAIN=40        # Half of the vertical gap between windows (Total gap = 40)
+MX_SUB=0         # Internal gap between top-left terminals
+MY_SUB=35         # Internal gap between top-left terminals
+TOP_BAR=20        # Ubuntu Top Bar Height
+
+# --- Edge-to-Edge Calculation (No outer padding) ---
+W_MAIN=$(( SW/2 - MX_MAIN ))
+H_MAIN=$(( (SH - TOP_BAR)/2 - MY_MAIN ))
+
+# Main Quadrant Anchors (Left/Top touch edges, Right/Bottom have center gap)
+X_L=0
+X_R=$(( SW/2 + MX_MAIN ))
+Y_T=$TOP_BAR
+Y_B=$(( (SH + TOP_BAR)/2 + MY_MAIN ))
+
+# Sub-grid Anchors (Precisely fits inside Q1 area: W_MAIN x H_MAIN)
+W_S=$(( (W_MAIN - MX_SUB)/2 ))
+H_S=$(( (H_MAIN - MY_SUB)/2 ))
+X_SL=$X_L
+X_SR=$(( W_MAIN - W_S + 70 ))
+Y_ST=$Y_T
+Y_SB=$(( H_MAIN - H_S + 25 ))
+
+# Geometry Strings for Terminator
+G_S1="--geometry=${W_S}x${H_S}+${X_SL}+${Y_ST}"
+G_S2="--geometry=${W_S}x${H_S}+${X_SR}+${Y_ST}"
+G_S3="--geometry=${W_S}x${H_S}+${X_SL}+${Y_SB}"
+G_S4="--geometry=${W_S}x${H_S}+${X_SR}+${Y_SB}"
+G_MAIN_R="--geometry=${W_MAIN}x${H_MAIN}+${X_R}+${Y_T}"
+# ==============================================================================
+
+# 5. Nodes Configuration
+CMD1="rosrun tf static_transform_publisher 302000 4123000 0 0 0 0 utm map 100 & \
+      rosrun tf static_transform_publisher 0 0 0 0 0 0 stier velodyne 100 & \
+      rosrun stier_bringup utm_tf_broadcaster.py & \
+      echo \"[MASTER] Core TF Logic active. Close window to kill system.\" && tail -f /dev/null"
+
+CMD2="roslaunch stier_bringup control_bringup.launch"
+CMD3="rosrun stier_bringup control_logger.py"
+CMD4="roslaunch vision_pkg vision.launch"
+CMD5="roslaunch lidar_stack_bringup lidar_stack_bringup.launch"
+
+# RViz Command (Fixed to use WRAPPER)
+RVIZ_CMD="rosrun rviz rviz -d \$(rospack find stier_bringup)/rviz/stier.rviz"
+
+# 6. Launch Windows (Background)
+terminator -u $G_S1 -T "[CORE-1] Master System" -e "$WRAPPER '$CMD1'" &
+SLAVE_PIDS+=($!)
+sleep 0.2
+
+terminator -u $G_S2 -T "[NODE-2] Control Loop" -e "$WRAPPER '$CMD2'" &
+SLAVE_PIDS+=($!)
+sleep 0.2
+
+terminator -u $G_S3 -T "[VISN-4] Vision Data" -e "$WRAPPER '$CMD4'" &
+SLAVE_PIDS+=($!)
+sleep 0.2
+
+terminator -u $G_S4 -T "[LIDR-5] Lidar Stack" -e "$WRAPPER '$CMD5'" &
+SLAVE_PIDS+=($!)
+sleep 0.2
+
+# 7. Launch GUI Apps (Background)
+RVIZ_PATH="$(rospack find stier_bringup)/rviz/stier.rviz"
+if [ -f "$RVIZ_PATH" ]; then
+    # Dynamically update rviz config to match current presets
+    sed -i "s/Height: [0-9]*/Height: ${H_MAIN}/" "$RVIZ_PATH"
+    sed -i "s/Width: [0-9]*/Width: ${W_MAIN}/" "$RVIZ_PATH"
+    # X/Y are indented in stier.rviz
+    sed -i "s/  X: [0-9]*/  X: ${X_L}/" "$RVIZ_PATH"
+    sed -i "s/  Y: [0-9]*/  Y: ${Y_T}/" "$RVIZ_PATH"
+fi
+/usr/bin/env bash "$WRAPPER" "$RVIZ_CMD" > /tmp/stier_rviz.log 2>&1 &
+SLAVE_PIDS+=($!)
+
+RQT_CMD="rosrun rqt_image_view rqt_image_view /vision/lane_fitting"
+/usr/bin/env bash "$WRAPPER" "$RQT_CMD" > /tmp/stier_rqt_img.log 2>&1 &
+SLAVE_PIDS+=($!)
+
+RQT_MAIN_CMD="rosrun rqt_gui rqt_gui"
+/usr/bin/env bash "$WRAPPER" "$RQT_MAIN_CMD" > /tmp/stier_rqt_gui.log 2>&1 &
+SLAVE_PIDS+=($!)
+
+# 7.5. Force All Window Positions via wmctrl (One-Shot per Window to avoid jitter)
+(
+  if command -v wmctrl > /dev/null; then
+    # Window titles to track
+    TITLES=("[CORE-1]" "[NODE-2]" "[VISN-4]" "[LIDR-5]" "RViz" "rqt_image_view" "[MONIT-3]" "rqt")
+    MOVED=(0 0 0 0 0 0 0 0)
+
+    for i in {1..120}; do
+      ALL_DONE=true
+      for idx in "${!TITLES[@]}"; do
+        if [ "${MOVED[$idx]}" -eq 0 ]; then
+          T="${TITLES[$idx]}"
+          
+          # Use grep -F for literal matching (ignores brackets)
+          if [ "$T" = "rqt" ]; then
+            WIN_ID=$(wmctrl -l | grep -i -F "rqt" | grep -v "rqt_image_view" | head -n 1 | awk '{print $1}')
+          else
+            WIN_ID=$(wmctrl -l | grep -i -F "$T" | head -n 1 | awk '{print $1}')
+          fi
+
+          if [ -n "$WIN_ID" ]; then
+            # --- Apply Geometry Logic ---
+            case $idx in
+              0) wmctrl -i -r "$WIN_ID" -e 0,${X_SL},${Y_ST},${W_S},${H_S} ;;
+              1) wmctrl -i -r "$WIN_ID" -e 0,${X_SR},${Y_ST},${W_S},${H_S} ;;
+              2) wmctrl -i -r "$WIN_ID" -e 0,${X_SL},${Y_SB},${W_S},${H_S} ;;
+              3) wmctrl -i -r "$WIN_ID" -e 0,${X_SR},${Y_SB},${W_S},${H_S} ;;
+              4) wmctrl -i -r "$WIN_ID" -e 0,${X_L},${Y_T},${W_MAIN},${H_MAIN} ;;
+              5) wmctrl -i -r "$WIN_ID" -e 0,${X_L},${Y_B},${W_MAIN},${H_MAIN} ;;
+              6) wmctrl -i -r "$WIN_ID" -e 0,${X_R},0,${W_MAIN},${H_MAIN} ;;
+              7) wmctrl -i -r "$WIN_ID" -e 0,${X_R},${Y_B},${W_MAIN},${H_MAIN} ;;
+            esac
+            MOVED[$idx]=1
+          else
+            ALL_DONE=false
+          fi
+        fi
+      done
+      
+      [ "$ALL_DONE" = true ] && break
+      sleep 0.5
+    done
+  fi
+) &
+
+# 8. Launch [3] Control Monitor (Foreground)
+terminator --no-dbus $G_MAIN_R -T "[MONIT-3] Control Monitor" -e "$WRAPPER '$CMD3'"

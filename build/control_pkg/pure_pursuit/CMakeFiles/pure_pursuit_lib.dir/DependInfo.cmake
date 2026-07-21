@@ -1,0 +1,36 @@
+# The set of languages for which implicit dependencies are needed:
+set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
+  )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/stier/catkin_ws/src/control_pkg/pure_pursuit/src/pure_pursuit.cpp" "/home/stier/catkin_ws/build/control_pkg/pure_pursuit/CMakeFiles/pure_pursuit_lib.dir/src/pure_pursuit.cpp.o"
+  "/home/stier/catkin_ws/src/control_pkg/pure_pursuit/src/pure_pursuit_node.cpp" "/home/stier/catkin_ws/build/control_pkg/pure_pursuit/CMakeFiles/pure_pursuit_lib.dir/src/pure_pursuit_node.cpp.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
+
+# Preprocessor definitions for this target.
+set(CMAKE_TARGET_DEFINITIONS_CXX
+  "ROSCONSOLE_BACKEND_LOG4CXX"
+  "ROS_BUILD_SHARED_LIBS=1"
+  "ROS_PACKAGE_NAME=\"pure_pursuit\""
+  "pure_pursuit_lib_EXPORTS"
+  )
+
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "/home/stier/catkin_ws/src/control_pkg/pure_pursuit/include"
+  "/home/stier/catkin_ws/devel/include"
+  "/home/stier/catkin_ws/src/drivers/gps/ublox/ublox_msgs/include"
+  "/home/stier/catkin_ws/src/drivers/gps/ublox/ublox_serialization/include"
+  "/opt/ros/noetic/include"
+  "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"
+  )
+
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/stier/catkin_ws/build/drivers/gps/ublox/ublox_msgs/CMakeFiles/ublox_msgs.dir/DependInfo.cmake"
+  )
+
+# Fortran module output directory.
+set(CMAKE_Fortran_TARGET_MODULE_DIR "")

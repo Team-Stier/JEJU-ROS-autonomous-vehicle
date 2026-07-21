@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/devel
+
+Name: stier_bringup
+Description: Description of stier_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

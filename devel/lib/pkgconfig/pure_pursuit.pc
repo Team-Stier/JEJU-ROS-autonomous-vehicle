@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/devel
+
+Name: pure_pursuit
+Description: Description of pure_pursuit
+Version: 0.0.0
+Cflags: -I/home/stier/catkin_ws/src/control_pkg/pure_pursuit/include
+Libs: -L${prefix}/lib -lpure_pursuit_lib
+Requires: roscpp std_msgs geometry_msgs nav_msgs erp42_msgs ublox_msgs

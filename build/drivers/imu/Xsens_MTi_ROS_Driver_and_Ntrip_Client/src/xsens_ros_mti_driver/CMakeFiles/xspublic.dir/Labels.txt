@@ -1,0 +1,13 @@
+# Target labels
+ xspublic
+# Source files and their labels
+/home/stier/catkin_ws/build/drivers/imu/Xsens_MTi_ROS_Driver_and_Ntrip_Client/src/xsens_ros_mti_driver/CMakeFiles/xspublic
+/home/stier/catkin_ws/build/drivers/imu/Xsens_MTi_ROS_Driver_and_Ntrip_Client/src/xsens_ros_mti_driver/CMakeFiles/xspublic.rule
+/home/stier/catkin_ws/build/drivers/imu/Xsens_MTi_ROS_Driver_and_Ntrip_Client/src/xsens_ros_mti_driver/CMakeFiles/xspublic-complete.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-install.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-mkdir.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-download.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-update.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-patch.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-configure.rule
+/home/stier/catkin_ws/build/xspublic/src/xspublic-stamp/xspublic-build.rule

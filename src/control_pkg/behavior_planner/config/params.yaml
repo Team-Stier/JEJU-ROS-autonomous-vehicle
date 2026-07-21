@@ -1,0 +1,15 @@
+# Driving parameters
+# 각 모드별 속도는 상한선 역할 -> 모드별 속도보다 speed_min, speed_max에 의해 계산된 가변 속도가 우선
+lookahead_distance: 2.1         # GPS Ld
+gps_speed: 10.0                 # GPS Speed
+vision_speed: 10.0              # Vision Speed
+vision_fallback_speed: 3.0      # 무시
+vision_lookahead: 2.1           # Vision Ld
+lidar_speed: 10.0               # Lidar Speed
+lidar_lookahead: 2.1            # Lidar Ld
+
+# Steer-adaptive speed control
+# 조향각이 0도 → speed_max, speed_steer_max_deg 이상 → speed_min으로 선형 보간
+speed_min: 5.0           # 최대 조향 시 최소 속도 (km/h)
+speed_max: 8.0           # 직진 시 최대 속도 (km/h)
+speed_steer_max_deg: 18.0  # 이 조향각(도) 이상이면 speed_min 적용

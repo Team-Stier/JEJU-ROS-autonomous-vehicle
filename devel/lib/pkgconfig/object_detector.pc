@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/devel
+
+Name: object_detector
+Description: Description of object_detector
+Version: 0.0.0
+Cflags: -I/home/stier/catkin_ws/devel/include -I/home/stier/catkin_ws/src/lidar_pkg/lidar_stack/src/object_detector/include
+Libs: -L${prefix}/lib 
+Requires: dynamic_reconfigure lidar_interfaces pcl_conversions pcl_ros roscpp rospy sensor_msgs std_msgs visualization_msgs

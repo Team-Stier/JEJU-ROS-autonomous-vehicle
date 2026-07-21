@@ -1,0 +1,22 @@
+<launch>
+  <arg name="points_topic" default="/velodyne_points" />
+  <arg name="roi_topic" default="/roi_raw" />
+  <arg name="voxel_topic" default="/voxel_info" />
+  <arg name="use_visualizer" default="true" />
+  <arg name="visualizer_frame_id" default="velodyne" />
+  <arg name="visualizer_marker_topic" default="/voxel_visualization_marker_array" />
+
+  <node pkg="object_detector" type="object_detector" name="object_detector" output="screen">
+    <remap from="velodyne_points" to="$(arg points_topic)" />
+    <remap from="roi_raw" to="$(arg roi_topic)" />
+    <remap from="voxel_info" to="$(arg voxel_topic)" />
+  </node>
+
+  <group if="$(arg use_visualizer)">
+    <node pkg="object_detector" type="voxel_visualizer.py" name="voxel_visualizer" output="screen">
+      <remap from="/voxel_info" to="$(arg voxel_topic)" />
+      <param name="frame_id" value="$(arg visualizer_frame_id)" />
+      <param name="marker_topic" value="$(arg visualizer_marker_topic)" />
+    </node>
+  </group>
+</launch>

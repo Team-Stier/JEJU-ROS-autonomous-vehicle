@@ -1,0 +1,8 @@
+prefix=/home/stier/catkin_ws/devel
+
+Name: rrt_path
+Description: Description of rrt_path
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs lidar_interfaces nav_msgs rospy

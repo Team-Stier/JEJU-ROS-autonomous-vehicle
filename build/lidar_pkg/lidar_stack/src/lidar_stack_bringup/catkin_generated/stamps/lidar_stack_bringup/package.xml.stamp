@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>lidar_stack_bringup</name>
+  <version>0.0.0</version>
+  <description>Top-level launch package for the lidar stack.</description>
+
+  <maintainer email="user@todo.todo">user</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>object_detector</exec_depend>
+  <exec_depend>rrt_path</exec_depend>
+  <exec_depend>safety_supervisor</exec_depend>
+</package>
